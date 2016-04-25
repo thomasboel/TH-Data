@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.thom.datawriter.formatting.Category;
+import com.thom.datawriter.formatting.SubCategory;
 
 public class DataWriter 
 {	
@@ -18,6 +19,7 @@ public class DataWriter
 		try 
 		{
 			FileWriter fw = new FileWriter(file.getName());
+			writeLine(file, "@th-data file\n");
 			fw.close();
 		} 
 		catch (IOException e) 
@@ -119,7 +121,7 @@ public class DataWriter
 	 */
 	public void countLines(DataFile file) throws IOException
 	{
-		System.out.println("Total lines: " + getLines(file) + " in DataFile: " + file.getName());
+		System.out.println("Total lines: " + getLines(file) + ", in DataFile: " + file.getName());
 	}
 	
 	/**
@@ -137,16 +139,42 @@ public class DataWriter
 		{
 			if (lines.get(i).startsWith("#"))
 			{
-				this.addCategory(file, new Category(lines.get(i).substring(2, lines.get(i).length())));
+				file.addCategory(new Category(lines.get(i).substring(2, lines.get(i).length())));
 			}
 		}
 	}
 	
 	/**
 	 * Adds a category to the ArrayList<Category> in the specified DataFile.
+	 * This also does the actual writing in the DataFile.
 	 */
-	public void addCategory(DataFile file, Category category)
+	public void addCategory(DataFile file, Category category) throws IOException
 	{
 		file.addCategory(category);
+		this.writeLine(file, "# " + category.getCategoryName() + "\n");
+	}
+	
+	/**
+	 * Returns whether or not a category exists within the specified DataFile.
+	 */
+	public boolean doesCategoryWithNameExist(DataFile file, String categoryName) throws IOException
+	{
+		for (int i = 0; i < getLines(file); i++)
+		{
+			if (readLine(file, i+1).startsWith("#"))
+			{
+				String currentCategoryName = readLine(file, i+1).substring(2, readLine(file, i+1).length());
+				
+				if (currentCategoryName.equalsIgnoreCase(categoryName)) return true;
+			}
+		}
+		return false;
+	}
+	
+	public void addSubCategory(DataFile file, Category category, SubCategory subCategory) throws IOException
+	{
+		subCategory.setCategory(category);
+		file.addSubCategory(subCategory);
+		this.writeLine(file, "- " + subCategory.getCategoryName() + "\n");
 	}
 }

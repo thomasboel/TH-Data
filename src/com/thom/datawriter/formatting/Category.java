@@ -7,7 +7,6 @@ public class Category
 	public Category(String name)
 	{
 		setCategoryName(name);
-		System.out.println("Category Initialized: " + name);
 	}
 	
 	public void setCategoryName(String name)
