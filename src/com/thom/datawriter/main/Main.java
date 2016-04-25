@@ -1,6 +1,5 @@
 package com.thom.datawriter.main;
 
-import java.io.File;
 import java.io.IOException;
 
 import com.thom.datawriter.DataFile;
@@ -8,16 +7,20 @@ import com.thom.datawriter.DataWriter;
 
 public class Main 
 {
-	static DataFile dataFile;
-	static File file;
-	
 	public static void main(String[] args) throws IOException 
 	{
 		DataWriter dw = new DataWriter();
 		
-		dataFile = new DataFile(file = new File("standard.th-data"));
+		// Calls the DataFile constructor, if the file already exists it is not replaced with a new one.
+		DataFile dataFile = new DataFile("standard.th-data");
 		
-		// Tells me the amount of lines in the file
-		dw.countLines(file);
+		/**
+		 * Managing the data file should be done in something like a data handler class.
+		 * But for the sake of testing, I will be doing all that here in this method.
+		 */
+		System.out.println(dw.getValueFromArrayList(dw.getDigitsFromLine(dataFile, 2)));
+		
+		// Prints the amount of lines in the file.
+		dw.countLines(dataFile);
 	}
 }

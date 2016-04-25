@@ -1,16 +1,17 @@
 package com.thom.datawriter;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataWriter 
 {
-	public void generateDataFile(File file)
+	/**
+	 * Generates a data file, no path. This means it will be created in the workspace directory.
+	 */
+	public void generateDataFile(DataFile file)
 	{
 		try 
 		{
@@ -23,14 +24,20 @@ public class DataWriter
 		}
 	}
 	
-	public boolean doesFileExist(File file)
+	/**
+	 * Checks to see if a DataFile exists, no path. This means it will check in the workspace directory.
+	 */
+	public boolean doesFileExist(DataFile file)
 	{
 		if (file.exists() && !file.isDirectory())
 		return true;
 		else return false;
 	}
 
-	public void writeLine(File file, String text) throws IOException
+	/**
+	 * Writes, or rather adds a new line of parameter 'text' to a specified DataFile.
+	 */
+	public void writeLine(DataFile file, String text) throws IOException
 	{
 		List<String> lines = Files.readAllLines(file.toPath());
 		
@@ -39,7 +46,10 @@ public class DataWriter
 		Files.write(file.toPath(), lines);
 	}
 	
-	public void setLine(File file, int line, String text) throws IOException
+	/**
+	 * Sets the contents of a specified line in a DataFile to be parameter 'text'.
+	 */
+	public void setLine(DataFile file, int line, String text) throws IOException
 	{
 		List<String> lines = Files.readAllLines(file.toPath());
 		
@@ -47,34 +57,64 @@ public class DataWriter
 		
 		Files.write(file.toPath(), lines);
 	}
-
-	public int getLineAmount(File file) throws IOException 
+	
+	/**
+	 * Returns a specific line as a string in the specified DataFile.
+	 */
+	public String readLine(DataFile file, int line) throws IOException
 	{
-	    LineNumberReader reader = null;
-	    
-	    try 
-	    {
-	        reader = new LineNumberReader(new FileReader(file));
-	        
-	        while ((reader.readLine()) != null);
-	        return reader.getLineNumber();
-	    } 
-	    catch (Exception e) 
-	    {
-	    	// This way i'll know if something went wrong, since the amount can't actually go below 0.
-	        return -1;
-	    } 
-	    finally 
-	    { 
-	        if (reader != null) 
-	        {
-	        	reader.close();
-	        }
-	    }
+		List<String> lines = Files.readAllLines(file.toPath());
+		
+		return lines.get(line-1);
 	}
 	
-	public void countLines(File file) throws IOException
+	/**
+	 * Returns an ArrayList of integers which are all the digits found on the specific line in the specified DataFile.
+	 */
+	public ArrayList<Integer> getDigitsFromLine(DataFile file, int line) throws IOException
 	{
-		System.out.println("Line amount: " + getLineAmount(file));
+		List<String> lines = Files.readAllLines(file.toPath());
+		
+		String lineContents = lines.get(line-1);
+		ArrayList<Integer> digits = new ArrayList<Integer>();
+		
+		for (int i = 0; i < lineContents.length(); i++)
+		{
+			if (Character.isDigit(lineContents.charAt(i)))
+			{
+				digits.add(Integer.valueOf(String.valueOf(lineContents.charAt(i))));
+			}
+		}
+		
+		return digits;
+	}
+	
+	/**
+	 * Returns an integer which is equal to putting all numbers in an ArrayList<Integer>, in a series of numbers.
+	 * Example: "Player Health: 10hp". This example would return 10.
+	 */
+	public int getValueFromArrayList(ArrayList<Integer> arrayList)
+	{
+		String line = arrayList.toString().replace('[', ' ').replace(']', ' ').replace(',', ' ').replaceAll(" ", "");
+		
+		return Integer.valueOf(line);
+	}
+
+	/**
+	 * Returns the amount of lines in a specified DataFile.
+	 */
+	public int getLines(DataFile file) throws IOException 
+	{
+		List<String> lines = Files.readAllLines(file.toPath());
+		
+		return lines.size();
+	}
+	
+	/**
+	 * Prints the amount of lines in a specified DataFile.
+	 */
+	public void countLines(DataFile file) throws IOException
+	{
+		System.out.println("Line amount: " + getLines(file));
 	}
 }
