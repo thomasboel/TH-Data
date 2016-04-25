@@ -6,8 +6,10 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.thom.datawriter.formatting.Category;
+
 public class DataWriter 
-{
+{	
 	/**
 	 * Generates a data file, no path. This means it will be created in the workspace directory.
 	 */
@@ -20,7 +22,8 @@ public class DataWriter
 		} 
 		catch (IOException e) 
 		{
-			e.printStackTrace();
+			System.out.println("There was an error whilst trying to generate the data file: " + file.getName());
+			e.printStackTrace();		
 		}
 	}
 	
@@ -95,9 +98,10 @@ public class DataWriter
 	 */
 	public int getValueFromArrayList(ArrayList<Integer> arrayList)
 	{
-		String line = arrayList.toString().replace('[', ' ').replace(']', ' ').replace(',', ' ').replaceAll(" ", "");
+		String line = arrayList.toString().replace('[', ' ').replace(']', ' ').replace(',', ' ').replaceAll("\\s", "");
 		
-		return Integer.valueOf(line);
+		if (line.isEmpty()) 	return 0; // The program crashes otherwise if getDigitsFromLine() is called on an empty line. This fixes it.
+		else 					return Integer.valueOf(line); 
 	}
 
 	/**
@@ -115,6 +119,34 @@ public class DataWriter
 	 */
 	public void countLines(DataFile file) throws IOException
 	{
-		System.out.println("Line amount: " + getLines(file));
+		System.out.println("Total lines: " + getLines(file) + " in DataFile: " + file.getName());
+	}
+	
+	/**
+	 * =========================================== START OF ORGANIZED DATA WRITING ===========================================
+	 */
+	
+	/**
+	 * Initializes the category ArrayList<Category> with all the categories found in the specified DataFile.
+	 */
+	public void initializeCategories(DataFile file) throws IOException
+	{
+		List<String> lines = Files.readAllLines(file.toPath());
+		
+		for (int i = 0; i < lines.size(); i++)
+		{
+			if (lines.get(i).startsWith("#"))
+			{
+				this.addCategory(file, new Category(lines.get(i).substring(2, lines.get(i).length())));
+			}
+		}
+	}
+	
+	/**
+	 * Adds a category to the ArrayList<Category> in the specified DataFile.
+	 */
+	public void addCategory(DataFile file, Category category)
+	{
+		file.addCategory(category);
 	}
 }

@@ -18,7 +18,7 @@ public class Main
 		 * Managing the data file should be done in something like a data handler class.
 		 * But for the sake of testing, I will be doing all that here in this method.
 		 */
-		System.out.println(dw.getValueFromArrayList(dw.getDigitsFromLine(dataFile, 2)));
+		
 		
 		// Prints the amount of lines in the file.
 		dw.countLines(dataFile);
