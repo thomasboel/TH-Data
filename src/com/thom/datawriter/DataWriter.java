@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.thom.datawriter.formatting.Category;
+import com.thom.datawriter.formatting.Listing;
 import com.thom.datawriter.formatting.SubCategory;
 
 public class DataWriter 
@@ -25,7 +26,7 @@ public class DataWriter
 		} 
 		catch (IOException e) 
 		{
-			System.out.println("There was an error whilst trying to generate the data file: " + file.getName());
+			System.out.println("There was an error whilst trying to generate the data file: " + file.getName()); 
 			e.printStackTrace();		
 		}
 	}
@@ -192,5 +193,46 @@ public class DataWriter
 		subCategory.setCategory(category);
 		file.addSubCategory(subCategory);
 		this.writeLine(file, "- " + subCategory.getCategoryName() + "\n");
+	}
+	
+	/**
+	 * Creates a Listing under a Category or SubCategory in the specified DataFile.
+	 */
+	public void addListing(DataFile file, Category category, SubCategory subCategory, Listing listing) throws IOException
+	{
+		List<String> lines = Files.readAllLines(file.toPath());
+		
+		setLine(file, getLineForNewListingInCategory(file, category, subCategory), "\n" + listing.getContents() + "\n");
+	}
+	
+	/**
+	 * Returns a line number (index) for a new Listing to be created in a Category or SubCategory in the specified DataFile.
+	 */
+	public int getLineForNewListingInCategory(DataFile file, Category category, SubCategory subCategory) throws IOException
+	{
+		List<String> lines = Files.readAllLines(file.toPath());
+		
+		// Checks whether this is listing goes under a sub category or not
+		if (subCategory != null)
+		{
+			for (int i = 0; i < lines.size(); i++)
+			{
+				if (lines.get(i).equals("- " + subCategory.getCategoryName()))
+				{
+					return i+2;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < lines.size(); i++)
+			{
+				if (lines.get(i).equals("# " + category.getCategoryName()))
+				{
+					return i+2;
+				}
+			}
+		}
+		return 0;
 	}
 }
