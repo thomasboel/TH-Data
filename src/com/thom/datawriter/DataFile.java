@@ -10,8 +10,10 @@ import com.thom.datawriter.formatting.SubCategory;
 
 public class DataFile extends File
 {		
-	DataWriter dw = new DataWriter();
-	
+	/**
+	 * The categories and sub categories that are a part of the specific DataFile. 
+	 * Sub categories are linked to a category using a HashMap which is then stored in an ArrayList of HashMaps.
+	 */
 	public ArrayList<Category> categories = new ArrayList<Category>();
 	public ArrayList<SubCategory> subCategories = new ArrayList<SubCategory>();
 	
@@ -20,6 +22,8 @@ public class DataFile extends File
 	public DataFile(String fileName)
 	{
 		super(fileName);
+		
+		DataWriter dw = new DataWriter();
 		
 		if (!dw.doesFileExist(this))
 			dw.generateDataFile(this);
