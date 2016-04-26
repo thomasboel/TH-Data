@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.thom.datawriter.formatting.Category;
@@ -130,6 +131,7 @@ public class DataWriter
 	
 	/**
 	 * Initializes the category ArrayList<Category> with all the categories found in the specified DataFile.
+	 * Also does this for all the sub categories as well as mapping what category the sub category is a child of.
 	 */
 	public void initializeCategories(DataFile file) throws IOException
 	{
@@ -140,6 +142,16 @@ public class DataWriter
 			if (lines.get(i).startsWith("#"))
 			{
 				file.addCategory(new Category(lines.get(i).substring(2, lines.get(i).length())));
+			}
+			
+			if (lines.get(i).startsWith("-"))
+			{
+				HashMap<SubCategory, Category> categorySet = new HashMap<SubCategory, Category>();
+				SubCategory subCateogry = new SubCategory(lines.get(i).substring(2, lines.get(i).length()));
+				
+				file.addSubCategory(subCateogry);
+				categorySet.put(subCateogry, new Category(lines.get(i-2)));
+				file.map.add(categorySet);
 			}
 		}
 	}
@@ -171,6 +183,10 @@ public class DataWriter
 		return false;
 	}
 	
+	/**
+	 * Adds a sub category to the ArrayList<SubCategory> in the specified DataFile. As well as adds the sub category to a category.
+	 * This also does the actual writing in the DataFile.
+	 */
 	public void addSubCategory(DataFile file, Category category, SubCategory subCategory) throws IOException
 	{
 		subCategory.setCategory(category);

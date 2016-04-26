@@ -3,6 +3,7 @@ package com.thom.datawriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.thom.datawriter.formatting.Category;
 import com.thom.datawriter.formatting.SubCategory;
@@ -13,6 +14,8 @@ public class DataFile extends File
 	
 	public ArrayList<Category> categories = new ArrayList<Category>();
 	public ArrayList<SubCategory> subCategories = new ArrayList<SubCategory>();
+	
+	public ArrayList<HashMap<SubCategory, Category>> map = new ArrayList<HashMap<SubCategory, Category>>();
 	
 	public DataFile(String fileName)
 	{

@@ -15,12 +15,15 @@ public class Main
 		
 		// Calls the DataFile constructor, if the file already exists it isn't replaced with a new one.
 		DataFile dataFile = new DataFile("standard.th-data");
+		DataFile formattedDataFile = new DataFile("formatted datafile.th-data");
 		
 		/**
 		 * Managing the data file should be done in something like a data handler class.
 		 * But for the sake of testing, I will be doing all that here, in this method.
 		 */
+		System.out.println(dataFile.map.get(0).get(dataFile.subCategories.get(0)).getCategoryName());
 		
 		dw.countLines(dataFile);
+		dw.countLines(formattedDataFile);
 	}
 }
