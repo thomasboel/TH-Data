@@ -10,6 +10,7 @@ import java.util.List;
 import com.thom.datawriter.formatting.Category;
 import com.thom.datawriter.formatting.Listing;
 import com.thom.datawriter.formatting.SubCategory;
+import com.thom.datawriter.formatting.TableListing;
 
 public class DataWriter 
 {	
@@ -261,7 +262,15 @@ public class DataWriter
 	 */
 	public void addListing(DataFile file, Category category, SubCategory subCategory, Listing listing) throws IOException
 	{
-		setLine(file, getLineForNewListingInCategory(file, category, subCategory), "\n" + listing.getContents() + "\n");
+		setLine(file, getLineForNewListingInCategory(file, category, subCategory), listing.getContents() + "\n");
+	}
+	
+	/**
+	 * Creates a Listing under a Category or SubCategory inside a TableListing in the specified DataFile.
+	 */
+	public void addListing(DataFile file, Category category, SubCategory subCategory, TableListing tableListing, Listing listing) throws IOException
+	{
+		setLine(file, getLineForNewListingInCategory(file, category, subCategory), listing.getContents() + "\n");
 	}
 	
 	/**
@@ -277,6 +286,9 @@ public class DataWriter
 			{
 				if (lines.get(i).equals("- " + subCategory.getCategoryName()))
 				{
+					/**
+					 * Instead of setting it to just 2 lines after, It must search through the whole sub category, through TableListing's and or Listings and then add it to the bottom
+					 */
 					return i+2;
 				}
 			}
@@ -287,10 +299,18 @@ public class DataWriter
 			{
 				if (lines.get(i).equals("# " + category.getCategoryName()))
 				{
+					/**
+					 * Instead of setting it to just 2 lines after, It must search through the whole category, through TableListing's and or Listings and then add it to the bottom
+					 */
 					return i+2;
 				}
 			}
 		}
 		return 0;
 	}
+	
+	/*public void addTableListing(DataFile file, Category category, SubCategory subCategory, TableListing tableListing)
+	{
+		setLine(file, getLineForNewListingInCategory(file, category, subCategory), listing.getContents() + "\n");
+	}*/
 }
