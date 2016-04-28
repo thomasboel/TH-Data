@@ -228,8 +228,8 @@ public class DataWriter
 		{
 			subCategory.setCategory(category);
 			file.addSubCategory(subCategory);
-			
-			this.setLine(file, getLineForNewListingInCategory(file, category, null), "\n- " + subCategory.getCategoryName() + "\n");
+
+			this.setLine(file, getLineForNewObject(file, subCategory, category, null, null), "\n- " + subCategory.getCategoryName() + "\n");
 		}
 		else
 		{
@@ -262,52 +262,115 @@ public class DataWriter
 	 */
 	public void addListing(DataFile file, Category category, SubCategory subCategory, Listing listing) throws IOException
 	{
-		setLine(file, getLineForNewListingInCategory(file, category, subCategory), listing.getContents() + "\n");
+		setLine(file, getLineForNewObject(file, listing, category, subCategory, null), listing.getContents() + "\n");
 	}
 	
 	/**
 	 * Creates a Listing under a Category or SubCategory inside a TableListing in the specified DataFile.
 	 */
-	public void addListing(DataFile file, Category category, SubCategory subCategory, TableListing tableListing, Listing listing) throws IOException
+	/*public void addListing(DataFile file, Category category, SubCategory subCategory, TableListing tableListing, Listing listing) throws IOException
 	{
-		setLine(file, getLineForNewListingInCategory(file, category, subCategory), listing.getContents() + "\n");
-	}
+		setLine(file, getLineForNewObject(file, category, subCategory, tableListing), listing.getContents() + "\n");
+	}*/
 	
 	/**
-	 * Returns a line number (index) for a new Listing to be created in a Category or SubCategory in the specified DataFile.
+	 * Returns a line (index) for a new Object to be placed at in either a Category, SubCategory or TableListing in the specified DataFile.
 	 */
-	public int getLineForNewListingInCategory(DataFile file, Category category, SubCategory subCategory) throws IOException
+	public int getLineForNewObject(DataFile file, Object objToAdd, Category category, SubCategory subCategory, TableListing tableListing) throws IOException
 	{
 		List<String> lines = getDataFileContents(file);
 		
-		if (subCategory != null)
+		if (category != null)
 		{
-			for (int i = 0; i < lines.size(); i++)
+			if (tableListing == null)
 			{
-				if (lines.get(i).equals("- " + subCategory.getCategoryName()))
+				// Adding to a Category
+				if (subCategory == null)
+				{	
+					for (int i = 0; i < file.categories.size(); i++)
+					{
+						if (file.categories.get(i).getCategoryName().equals(category.getCategoryName()))
+						{
+							if (file.categories.size() > i+1)	
+							{
+								// Make it so you can't add Listing's to Categories that uses SubCategories.
+								return getCategoryLine(file, file.categories.get(i+1));
+							}
+							else
+							{
+								return lines.size();
+							}
+						}
+					}
+				}
+				// Adding to a SubCategory
+				else
 				{
-					/**
-					 * Instead of setting it to just 2 lines after, It must search through the whole sub category, through TableListing's and or Listings and then add it to the bottom
-					 */
-					return i+2;
+					
 				}
 			}
+			// Adding to a TableListing
+			else
+			{
+				
+			}
+		}
+		// Adding outside Formatting Objects
+		else
+		{
+			// Make it so you can't add Listing's to Categories that uses SubCategories.
+			return lines.size();
+		}
+		System.out.println("Failed");
+		return 0;
+	}
+	
+	public boolean isLineListing(DataFile file, String line)
+	{
+		if (line.startsWith("#") || line.startsWith("-") || line.isEmpty())
+		{
+			return false;
 		}
 		else
 		{
-			for (int i = 0; i < lines.size(); i++)
+			return true;
+		}
+	}
+	
+	public int getCategoryLine(DataFile file, Category category) throws IOException
+	{
+		List<String> lines = getDataFileContents(file);
+		
+		for (int i = 0; i < lines.size(); i++)
+		{
+			if (lines.get(i).equals("# " + category.getCategoryName()))
 			{
-				if (lines.get(i).equals("# " + category.getCategoryName()))
-				{
-					/**
-					 * Instead of setting it to just 2 lines after, It must search through the whole category, through TableListing's and or Listings and then add it to the bottom
-					 */
-					return i+2;
-				}
+				return i;
 			}
 		}
 		return 0;
 	}
+	
+	public int getSubCategoryLine(DataFile file, SubCategory subCategory) throws IOException
+	{
+		List<String> lines = getDataFileContents(file);
+		
+		for (int i = 0; i < lines.size(); i++)
+		{
+			if (lines.get(i).equals("# " + subCategory.getCategoryName()))
+			{
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	/*public int getTableListingLine(DataFile file, TableListing tableListing)
+	{
+		List<String> lines = getDataFileContents(file);
+		
+		
+	}*/
 	
 	/*public void addTableListing(DataFile file, Category category, SubCategory subCategory, TableListing tableListing)
 	{

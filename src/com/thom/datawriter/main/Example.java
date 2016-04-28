@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.thom.datawriter.DataFile;
 import com.thom.datawriter.DataWriter;
 import com.thom.datawriter.formatting.Category;
+import com.thom.datawriter.formatting.Listing;
 import com.thom.datawriter.formatting.SubCategory;
 
 public class Example 
@@ -53,6 +54,8 @@ public class Example
 		dw.addSubCategory(file, items, food);
 		
 		dw.addCategory(file, new Category("Lol"));
+		
+		dw.addSubCategory(file, blocks, new SubCategory("Test"));
 		
 		dw.countLines(file);
 	}
