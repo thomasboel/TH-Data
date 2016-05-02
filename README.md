@@ -1,4 +1,4 @@
-# TH-Data ![](http://i.imgur.com/fT1KTEL.png)
+# TH-Data
 Writing Organized and Formatted (Encrypted) Data Locally.
 
 The reason I started working on the project was because of a mere school project revolving games. 
@@ -10,3 +10,5 @@ In fact I only just really began. But never the less I love it and I want to lea
 With that said, I will strive to become better, I will keep making projects revolving around these type of things. 
 
 Catch ya later!
+
+![](http://i.imgur.com/fT1KTEL.png)
