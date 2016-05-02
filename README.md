@@ -1,4 +1,4 @@
-# TH-Data
+# TH-Data ![](http://i.imgur.com/fT1KTEL.png)
 Writing Organized and Formatted (Encrypted) Data Locally.
 
 The reason I started working on the project was because of a mere school project revolving games. 
