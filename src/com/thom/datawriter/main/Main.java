@@ -5,12 +5,20 @@ import java.io.IOException;
 import com.thom.datawriter.DataFile;
 import com.thom.datawriter.DataWriter;
 import com.thom.datawriter.formatting.*;
+import com.thom.encrypter.Decrypter;
+import com.thom.encrypter.Encrypter;
+import com.thom.encrypter.EncryptionKey;
 
 public class Main 
 {
 	public static void main(String[] args) throws IOException 
 	{
-		Example exampleClass = new Example();
+		Encrypter encrypter = new Encrypter();
+		Decrypter decrypter = new Decrypter();
+		
+		System.out.println(encrypter.encrypt(new StringBuffer("Jeg er for fanden manden"), new EncryptionKey(3)));
+		
+		//Example exampleClass = new Example();
 		
 		/*============= Testing =============*/
 		

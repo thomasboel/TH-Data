@@ -154,9 +154,11 @@ public class DataWriter
 				SubCategory subCategory = new SubCategory(lines.get(i).substring(2, lines.get(i).length())); 
 		
 				file.addSubCategory(subCategory);
+				subCategory.setCategory(getCategoryFromLine(file, getCategoryLineFromSubCategory(file, subCategory, i)));
+				System.out.println("Initialized SubCategory: " + subCategory.getSubCategoryName() + ", to the Category: " + getCategoryFromLine(file, getCategoryLineFromSubCategory(file, subCategory, i)).getCategoryName());
 				
 				// Adds a <K,V> set, to the HashMap by first taking SubCategory found, and then the Category from that SubCategory is retrieved via the line number of the SubCategory using the getCategoryLineFromSubCategory() Method.
-				categorySet.put(subCategory, new Category(lines.get(getCategoryLineFromSubCategory(file, subCategory, i))));
+				categorySet.put(subCategory, getCategoryFromLine(file, getCategoryLineFromSubCategory(file, subCategory, i)));
 				// Adds the HashMap to the DataFile's ArrayList of SubCategory, Category HashMaps.
 				file.map.add(categorySet); 
 			}
@@ -175,10 +177,24 @@ public class DataWriter
 		{
 			if (lines.get(subCategoryLineNumber-i).startsWith("#"))
 			{
-				return subCategoryLineNumber-i;
+				return subCategoryLineNumber-i+1;
 			}
 		}
 		return 0;
+	}
+	
+	public Category getCategoryFromLine(DataFile file, int lineNumber) throws IOException
+	{
+		for (int i = 0; i < file.categories.size(); i++)
+		{
+			String category = "# " + file.categories.get(i).getCategoryName();
+			
+			if (category.equals(readLine(file, lineNumber)))
+			{
+				return file.categories.get(i);
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -224,16 +240,16 @@ public class DataWriter
 	 */
 	public void addSubCategory(DataFile file, Category category, SubCategory subCategory) throws IOException
 	{
-		if (!doesSubCategoryWithNameExist(file, subCategory.getCategoryName()))
+		if (!doesSubCategoryWithNameExist(file, subCategory.getSubCategoryName()))
 		{
 			subCategory.setCategory(category);
 			file.addSubCategory(subCategory);
 
-			this.setLine(file, getLineForNewObject(file, subCategory, category, null, null), "\n- " + subCategory.getCategoryName() + "\n");
+			this.setLine(file, getLineForNewObject(file, subCategory, category, null, null), "\n- " + subCategory.getSubCategoryName() + "\n");
 		}
 		else
 		{
-			System.out.println("The Sub-Category '" + subCategory.getCategoryName() + "' already exists within the DataFile: " + file.getName());
+			System.out.println("The Sub-Category '" + subCategory.getSubCategoryName() + "' already exists within the DataFile: " + file.getName());
 		}
 	}
 	
@@ -293,7 +309,6 @@ public class DataWriter
 						{
 							if (file.categories.size() > i+1)	
 							{
-								// Make it so you can't add Listing's to Categories that uses SubCategories.
 								return getCategoryLine(file, file.categories.get(i+1));
 							}
 							else
@@ -301,12 +316,26 @@ public class DataWriter
 								return lines.size();
 							}
 						}
+						else { System.out.println("The Category you specified does not exist within the DataFile: " + file.getName()); }
 					}
 				}
 				// Adding to a SubCategory
 				else
 				{
-					
+					// Checking if the subcategory exists
+					for (int i = 0; i < file.subCategories.size(); i++)
+					{
+						if (file.subCategories.get(i).getSubCategoryName().equals(subCategory.getSubCategoryName()))
+						{
+							System.out.println(subCategory.getCategory().getCategoryName());
+//							if (subCategory.getCategory().getCategoryName().equals(category.getCategoryName()))
+//							{
+//								return getSubCategoryLine(file, subCategory)+2;
+//							}
+//							else { System.out.println("The SubCategory you specified does not exist within the Category: " + category.getCategoryName()); }
+						}
+						else { System.out.println("The SubCategory you specified does not exist within the DataFile: " + file.getName()); }
+					}
 				}
 			}
 			// Adding to a TableListing
@@ -325,9 +354,12 @@ public class DataWriter
 		return 0;
 	}
 	
-	public boolean isLineListing(DataFile file, String line)
+	public boolean isLineListing(DataFile file, int lineNumber) throws IOException
 	{
-		if (line.startsWith("#") || line.startsWith("-") || line.isEmpty())
+		List<String> lines = getDataFileContents(file);
+		String line = lines.get(lineNumber);
+		
+		if (line.startsWith("#") || line.startsWith("-") || line.isEmpty() || line.equals("@th-data file"))
 		{
 			return false;
 		}
@@ -357,9 +389,9 @@ public class DataWriter
 		
 		for (int i = 0; i < lines.size(); i++)
 		{
-			if (lines.get(i).equals("# " + subCategory.getCategoryName()))
+			if (lines.get(i).equals("- " + subCategory.getSubCategoryName()))
 			{
-				return i;
+				return i+1;
 			}
 		}
 		return 0;

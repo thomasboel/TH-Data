@@ -1,20 +1,24 @@
 @th-data file
 
-# Blocks
+# Numbers
 
-- Test
 
-- Decoration Blocks
+- Integers
 
-- Machine Blocks
+a = 5
+b: 6
+c is 7
 
-# Items
+- Floats
 
-- Food
+d equals 8.9
+e = 10.11
 
-- Weapons
+# Booleans
 
-- Tools
+isProgrammingCool: true
+is java the best or what? true
+do i like mushrooms = false
 
-# Armor
+# Other stuff
 

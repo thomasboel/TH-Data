@@ -57,6 +57,12 @@ public class Example
 		
 		dw.addSubCategory(file, blocks, new SubCategory("Test"));
 		
+		//System.out.println(dw.getLineForNewObject(file, new Listing("Lol"), blocks, machineBlocks, null));
+		for (int i = 0; i < file.map.size(); i++)
+		{
+			System.out.println(file.map.get(i).toString());
+		}
+		
 		dw.countLines(file);
 	}
 }

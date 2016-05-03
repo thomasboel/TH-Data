@@ -7,13 +7,9 @@ Listing 2
 ...
 Listing 10
 
-==================== Category_Name END ====================
-
 # Category_Name
 
 Listing 1	Listing 2	...	Listing 10
-
-==================== Category_Name END ====================
 
 # Category_Name
 
@@ -21,15 +17,11 @@ Listing 1	Listing 2
 Listing 3	Listing 4
 ...		Listing 10
 
-==================== Category_Name END ====================
-
 # Category_Name
 
 Listing 1	Listing 2	Listing 3
 Listing 4	...
 Listing 10
-
-==================== Category_Name END ====================
 
 # Category_Name
 
@@ -44,5 +36,3 @@ Listing 1
 Listing 2
 ...
 Listing 10
-
-==================== Category_Name END ====================
