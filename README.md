@@ -1,7 +1,7 @@
 # TH-Data
 Writing Organized and Formatted (Encrypted) Data Locally.
 
-The reason I started working on the project was because of a mere school project revolving games. 
+The reason I started working on the project was because of a school project revolving games. 
 As time past I made some simple writing and reading from a file and thought that the concept was pretty cool.
 
 I wanted to take it to the next step though, push my limits as far as possible. I'm not the best programmer out there.
