@@ -11,4 +11,4 @@ With that said, I will strive to become better, I will keep making projects revo
 
 Catch ya later!
 
-![](http://i.imgur.com/fT1KTEL.png)
+![](http://i.imgur.com/NmdfoB0.png)
